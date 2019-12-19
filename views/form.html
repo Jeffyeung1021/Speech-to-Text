@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My App Engine App</title>
+    <script
+      src="https://code.jquery.com/jquery-2.2.4.min.js"
+      integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+      crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <h2>Make transcribe from a speech file.</h2>
+    <!-- <form method="POST" action="/submit"> -->
+      <!-- <div>
+        <input type="text" name="name" placeholder="Name">
+      </div>
+      <div>
+        <textarea name="message" placeholder="Message"></textarea>
+      </div>
+      <div>       -->
+          <!--ul class="dropdownmenu" id="select_session">
+            <img alt="Open" id="open_img" src="../static/open.png" width=32 height=32>
+                  <a id="open_file" onclick="openFile();">Open A Local File </a>
+                  <input type="file" name="fileName" id="selected_file">
+                  <output id="list" style="visibility: hidden"></output>
+              <div id="sessions_menu"></div>
+          </ul-->
+      </div>
+      <h3>Step 1. Upload the speech file: </h3>
+      <!-- <button id ="upload_button" type="button">Upload</button>  -->
+      <!-- <form ref='uploadForm' 
+        id='uploadForm' 
+        action='/upload' 
+        method='post' 
+        encType="multipart/form-data"> -->
+              1a. <input type="file" name="fileName" id="selected_file"/><br>
+              1b. <input type='submit' value='Upload!' id="upload_btn"/>
+      <!-- </form>  -->
+      <br>
+
+      <script>
+        function openFileOption()
+      {
+        document.getElementById("file1").click();
+      }
+      </script>
+      <input type="file" id="file1" style="display:none">
+      <!--a href="#" onclick="openFileOption();return;">open File Dialog</a-->
+      <h3>Step 2. Change the parameters if applicable: </h3>
+      <div>
+        Language = <input list="languages" name="language" value="en-US" id=language>
+        <datalist id="languages">
+          <option value="en-US">
+          <option value="yue-Hant-HK">
+          <option value="zh-TW">
+          <option value="ja-JP">  
+          <option value="cmn-Hans-CN">
+        </datalist>
+        Encoding = <input list="encodings" name="encoding" value="flac" id=encoding>
+        <datalist id="encodings">
+          <option value="flac">
+          <option value="m4a">
+          <option value="mp3">
+        </datalist>
+        Sample Rate = <input list="sampleRH" name="sampleRHz" value=16000 id=sampleRHz>
+        <datalist id="sampleRH">
+          <option value=8000>
+          <option value=16000>
+        </datalist>
+      </div>
+     
+
+      <h3>Step 3. Press the button to make transcribe: </h3>
+      <div>
+         <button type="button">Start</button> 
+      </div>
+      <BR>
+      <div>
+        <textarea id="Outbox" value ="qqq" name="Ouputbox"  rows="25" cols="108"></textarea>
+      </div>
+    <!-- </form>  -->
+  </body>
+  <script>
+    //const fs = require('fs');
+    $("button").click(function(){
+      //let inFile = $("#selected_file")
+      let path = $("#selected_file").val()
+      let fileName = $("#selected_file").val().split("\\")[2];
+      let encoding =  $("#encoding").val();
+      let sampleRate = $("#sampleRHz").val();
+      let language =  $("#language").val();
+      document.getElementById("Outbox").innerHTML = "The result is ..."; //Reset output
+      console.log("here we are", fileName )
+      //console.log("2nd parameter", sampleRate)
+      $.post("/submit", {path:path,fileName:fileName, sampleRate:sampleRate,language:language,encoding:encoding},
+          function(data, status){
+          console.log("Data: " + data.xxx + "\nStatus: " + status);
+          document.getElementById("Outbox").innerHTML = data.xxx;
+      });
+    });
+   $("#upload_btn").click(function(){
+         let upFile = $('#selected_file')[0].files[0];
+         console.log("upFile: ----> " , upFile );
+         //var contents = fs.readFileSync(fileName);
+         // let upFile = $('#selected_file')[0]; 
+        let fileName = $("#selected_file").val().split("\\")[2];
+         console.log("file type: ----> " , typeof(upFile) );
+         console.log("file Name: ----> ", fileName);
+         console.log("file: ----> " , upFile );
+     //      //const file = fs.readFileSync(upFile)
+    //      console.log("Readin -->", typeof(selected_file.files[0]) );
+         $.post("/upload", {upFile:upFile}, function(data, status){
+           console.log("Copye file to server "  + data +  "\nStatus: " + status);
+           }
+         );
+    });
+  </script>
+  <script> 
+    // Requiring fs module in which 
+    // readFile function is defined. 
+    //sconst fs = require('fs') 
+      
+    // Reading data in utf-8 format 
+    // which is a type of character set. 
+    // Instead of 'utf-8' it can be  
+    // other character set also like 'ascii' 
+    // fs.readFile('Input.txt', 'utf-8', (err, data) => { 
+    //     if (err) throw err; 
+      
+    //     // Converting Raw Buffer to text 
+    //     // data using tostring function. 
+    //     console.log(data); 
+    // }) 
+    </script> 
+</html>
